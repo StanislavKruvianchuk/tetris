@@ -15,3 +15,10 @@ let context = canvas.getContext("2d");
 context.fillRect(0, 0, 20, 20);
 context.fillRect(0, 50, 20, 20);
 context.fillRect(0, 90, 20, 20);
+
+context.beginPath();
+context.strokeStyle = "blue";
+context.lineWidth = 20;
+context.arc(100, 100, 50, 0, Math.PI * 2, false);
+context.stroke();
+context.closePath();
