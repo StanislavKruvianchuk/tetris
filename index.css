@@ -1,0 +1,31 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    background-color: bisque;
+}
+
+.tetris {
+    height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.tetris__inner {
+    height: 600px;
+    width: 700px;
+    padding: 30px;
+    display: flex;
+    gap: 10px;
+    background: #fff;
+}
+
+.tetris__info {
+    display: flex;
+    flex-direction: column;
+
+}
+
+.tetris__title {
+    margin-bottom: 20px;
+    font-size: 30px;
+}
