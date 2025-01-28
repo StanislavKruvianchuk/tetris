@@ -3,22 +3,39 @@ const canvasInner = document.getElementById("canvas-inner");
 const window_height = canvasInner.offsetHeight;
 const window_width = canvasInner.offsetWidth;
 
-console.log(canvasInner)
-console.log(window_height)
-
-
 canvas.width = window_height / 2
 canvas.height = window_width / 2
 
 let context = canvas.getContext("2d");
 
-context.fillRect(0, 0, 20, 20);
-context.fillRect(0, 50, 20, 20);
-context.fillRect(0, 90, 20, 20);
+class Square {
+    constructor(xpos, ypos, color) {
+        this.xpos = xpos;
+        this.ypos = ypos;
+        this.color = color;
 
-context.beginPath();
-context.strokeStyle = "blue";
-context.lineWidth = 20;
-context.arc(100, 100, 50, 0, Math.PI * 2, false);
-context.stroke();
-context.closePath();
+        this.dy = 1;
+    }
+
+    draw(context) {
+        context.beginPath();
+        context.fillRect(this.xpos, this.ypos, 50, 50);
+        context.closePath();
+    }
+
+    update() {
+        context.clearRect(0, 0, window_width, window_height);
+
+        this.draw(context);
+        this.ypos += this.dy;
+    }
+}
+
+let my_square = new Square(140, 0, "black");
+my_square.draw(context)
+
+let updateSquare = () => {
+    requestAnimationFrame(updateSquare)
+    my_square.update();
+}
+updateSquare();
