@@ -1,41 +1,102 @@
-let canvas = document.getElementById("canvas");
-const canvasInner = document.getElementById("canvas-inner");
-const window_height = canvasInner.offsetHeight;
-const window_width = canvasInner.offsetWidth;
+const canvas = document.getElementById("canvas");
+canvas.width = 300;
+canvas.height = 600;
+const context = canvas.getContext("2d");
 
-canvas.width = window_height / 2
-canvas.height = window_width / 2
+const blockSize = 30;
 
-let context = canvas.getContext("2d");
+const TETRIMINOS = {
+    I: [
+        [1, 1, 1, 1]
+    ],
+    O: [
+        [1, 1],
+        [1, 1]
+    ],
+    T: [
+        [0, 1, 0],
+        [1, 1, 1]
+    ],
+    S: [
+        [0, 1, 1],
+        [1, 1, 0]
+    ],
+    Z: [
+        [1, 1, 0],
+        [0, 1, 1]
+    ],
+    J: [
+        [1, 0, 0],
+        [1, 1, 1]
+    ],
+    L: [
+        [0, 0, 1],
+        [1, 1, 1]
+    ]
+};
 
-class Square {
-    constructor(xpos, ypos, color) {
+console.log(TETRIMINOS.I)
+
+class Tetrimino {
+    constructor(blockSize, xpos, ypos, shape, color) {
+        this.blockSize = blockSize;
         this.xpos = xpos;
         this.ypos = ypos;
+        this.shape = shape;
         this.color = color;
-
-        this.dy = 1;
+        this.dy = 2;
     }
 
     draw(context) {
-        context.beginPath();
-        context.fillRect(this.xpos, this.ypos, 50, 50);
-        context.closePath();
+        context.fillStyle = this.color;
+        console.log(this.shape)
+
+        for (let row = 0; row < this.shape.length; row++) {
+            for (let col = 0; col < this.shape[row].length; col++) {
+                if (this.shape[row][col] === 1) {
+                    const x = this.xpos + col * this.blockSize;
+                    const y = this.ypos + row * this.blockSize;
+                    context.fillRect(x, y, this.blockSize, this.blockSize);
+                    context.strokeStyle = "#000";
+                    context.strokeRect(x, y, this.blockSize, this.blockSize);
+                }
+            }
+        }
     }
+
 
     update() {
-        context.clearRect(0, 0, window_width, window_height);
+        if (this.ypos == (canvas.height - (blockSize * this.shape.length))) {
+            this.ypos = this.ypos
+        } else {
+            this.ypos += this.dy;
 
-        this.draw(context);
-        this.ypos += this.dy;
+        }
     }
 }
 
-let my_square = new Square(140, 0, "black");
-my_square.draw(context)
 
-let updateSquare = () => {
-    requestAnimationFrame(updateSquare)
-    my_square.update();
+const tetrimino = new Tetrimino(
+    blockSize,
+    90,
+    0,
+    TETRIMINOS.I,
+    "black"
+);
+
+const animate = () => {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+    tetrimino.update();
+    tetrimino.draw(context);
+    requestAnimationFrame(animate);
+};
+
+const startGame = () => {
+    const startButton = document.getElementById('start-game');
+
+    startButton.addEventListener('click', () => {
+        animate();
+    })
 }
-updateSquare();
+
+startGame();
